@@ -19,9 +19,7 @@ export default function Home() {
     const location = useLocation();
     const loadMoreRef = useRef(null);
 
-    const { items, loading, error } = useSelector(
-        (state) => state.products
-    );
+    const { items, loading } = useSelector((state) => state.products);
 
     const [search, setSearch] = useState("");
     const [visibleCount, setVisibleCount] = useState({});
@@ -53,20 +51,22 @@ export default function Home() {
             image:
                 "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
         },
-        { 
-            title: "Electronics Deals ⚡", 
-            subtitle: "Best prices on gadgets", 
-            badge: "MEGA SALE", 
-            perks: ["No Cost EMI", "1 Year Warranty", "Top Rated"], 
-            image: "https://images.unsplash.com/photo-1518770660439-4636190af475",
-         }, 
-         { 
-            
-            title: "Mega Coupon 🎟️", 
-            subtitle: "Use SAVE20 & get extra 20% off", 
-            badge: "EXCLUSIVE", 
-            perks: ["Limited Users", "Stackable Offers", "Instant Savings"], 
-            image: "https://www.hostgator.com/blog/wp-content/uploads/2021/12/create-coupon-strategy-for-ecommerce-store.jpeg", },
+        {
+            title: "Electronics Deals ⚡",
+            subtitle: "Best prices on gadgets",
+            badge: "MEGA SALE",
+            perks: ["No Cost EMI", "1 Year Warranty", "Top Rated"],
+            image:
+                "https://images.unsplash.com/photo-1518770660439-4636190af475",
+        },
+        {
+            title: "Mega Coupon 🎟️",
+            subtitle: "Use SAVE20 & get extra 20% off",
+            badge: "EXCLUSIVE",
+            perks: ["Limited Users", "Stackable Offers", "Instant Savings"],
+            image:
+                "https://www.hostgator.com/blog/wp-content/uploads/2021/12/create-coupon-strategy-for-ecommerce-store.jpeg",
+        },
     ];
 
     /* FETCH */
@@ -116,31 +116,11 @@ export default function Home() {
     const handleViewLess = (cat) =>
         setVisibleCount((p) => ({ ...p, [cat]: 4 }));
 
-    /* INFINITE */
-    useEffect(() => {
-        const obs = new IntersectionObserver(
-            ([e]) => {
-                if (e.isIntersecting) {
-                    setVisibleCount((prev) => {
-                        const next = { ...prev };
-                        Object.keys(groupedProducts).forEach(
-                            (c) => (next[c] = (next[c] || 4) + 4)
-                        );
-                        return next;
-                    });
-                }
-            },
-            { threshold: 0.8 }
-        );
-
-        loadMoreRef.current && obs.observe(loadMoreRef.current);
-        return () => obs.disconnect();
-    }, [groupedProducts]);
-
     return (
         <div className="min-h-screen bg-gray-50">
+            {/* HERO SECTION */}
 
-            {/* 🔥 HERO */}
+
             <section className="relative">
                 <div
                     className="h-[220px] sm:h-[300px] md:h-[420px] flex items-center justify-center bg-cover bg-center text-white"
@@ -189,7 +169,6 @@ export default function Home() {
                     ))}
                 </div>
             </section>
-
             {/* 🔍 SEARCH */}
             <div className="max-w-7xl mx-auto px-4 py-6">
                 <input
@@ -202,14 +181,17 @@ export default function Home() {
 
             {/* 🛍 PRODUCTS */}
             <div className="max-w-7xl mx-auto px-4 pb-20">
+
+                {/* ✅ SKELETON GRID (FIXED) */}
                 {loading && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {Array.from({ length: 8 }).map((_, i) => (
                             <SkeletonCard key={i} />
                         ))}
                     </div>
                 )}
 
+                {/* ✅ PRODUCTS GRID (FIXED) */}
                 {!loading &&
                     Object.keys(groupedProducts).map((cat) => {
                         const visible = visibleCount[cat] || 4;
@@ -219,7 +201,7 @@ export default function Home() {
                             <section
                                 key={cat}
                                 id={`category-${cat}`}
-                                className="mb-14 scroll-mt-28"
+                                className="mb-14"
                             >
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-xl sm:text-2xl font-bold capitalize">
@@ -230,7 +212,7 @@ export default function Home() {
                                         {visible < total && (
                                             <button
                                                 onClick={() => handleViewMore(cat)}
-                                                className="hover:underline cursor-pointer"
+                                                className="hover:underline"
                                             >
                                                 View More →
                                             </button>
@@ -238,7 +220,7 @@ export default function Home() {
                                         {visible > 4 && (
                                             <button
                                                 onClick={() => handleViewLess(cat)}
-                                                className="text-gray-500 hover:underline cursor-pointer"
+                                                className="text-gray-500 hover:underline"
                                             >
                                                 View Less
                                             </button>
@@ -246,7 +228,7 @@ export default function Home() {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                     {groupedProducts[cat]
                                         .slice(0, visible)
                                         .map((p) => (
@@ -256,9 +238,16 @@ export default function Home() {
                             </section>
                         );
                     })}
-
-                <div ref={loadMoreRef} className="h-10" />
             </div>
         </div>
     );
 }
+
+
+
+
+
+
+
+
+
