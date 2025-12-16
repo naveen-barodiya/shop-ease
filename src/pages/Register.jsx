@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
-export default function Register() {
+
+export default function Register({ setUser }) {
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
@@ -9,6 +10,7 @@ export default function Register() {
         email: "",
         mobile: "",
         password: "",
+        confirmPassword: "",
     });
 
     const handleChange = (e) => {
@@ -25,7 +27,7 @@ export default function Register() {
 
         const users = JSON.parse(localStorage.getItem("users")) || [];
 
-        if (users.find(u => u.email === form.email)) {
+        if (users.find((u) => u.email === form.email)) {
             alert("User already exists");
             return;
         }
@@ -38,30 +40,33 @@ export default function Register() {
             avatar: null,
         };
 
-        users.push(newUser);
+        const updatedUsers = [...users, newUser];
 
-        localStorage.setItem("users", JSON.stringify(users));
+        // 🔥 SAVE DATA
+        localStorage.setItem("users", JSON.stringify(updatedUsers));
         localStorage.setItem("currentUser", JSON.stringify(newUser));
-        setUser(newUser); // ✅ IMPORTANT
+
+        // 🔥 VERY IMPORTANT
+        setUser(newUser);
+
+        // 🔥 DIRECT LOGIN AFTER REGISTER
         navigate("/");
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
             <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
-
                 <h2 className="text-3xl font-bold text-center mb-6">
                     Create Account 🚀
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-
                     <input
                         name="name"
                         placeholder="Full Name"
                         onChange={handleChange}
                         required
-                        className="w-full p-3 border rounded focus:ring-2 focus:ring-black"
+                        className="w-full p-3 border rounded"
                     />
 
                     <input
@@ -70,7 +75,7 @@ export default function Register() {
                         placeholder="Email"
                         onChange={handleChange}
                         required
-                        className="w-full p-3 border rounded focus:ring-2 focus:ring-black"
+                        className="w-full p-3 border rounded"
                     />
 
                     <input
@@ -79,7 +84,7 @@ export default function Register() {
                         placeholder="Mobile Number"
                         onChange={handleChange}
                         required
-                        className="w-full p-3 border rounded focus:ring-2 focus:ring-black"
+                        className="w-full p-3 border rounded"
                     />
 
                     <input
@@ -88,17 +93,17 @@ export default function Register() {
                         placeholder="Password"
                         onChange={handleChange}
                         required
-                        className="w-full p-3 border rounded focus:ring-2 focus:ring-black"
+                        className="w-full p-3 border rounded"
                     />
+
                     <input
                         name="confirmPassword"
                         type="password"
                         placeholder="Confirm Password"
                         onChange={handleChange}
                         required
-                        className="w-full p-3 border rounded focus:ring-2 focus:ring-black"
+                        className="w-full p-3 border rounded"
                     />
-
 
                     <button className="w-full bg-black text-white py-3 rounded">
                         Sign Up
