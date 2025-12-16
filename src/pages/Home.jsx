@@ -230,7 +230,7 @@ export default function Home() {
                                         {visible < total && (
                                             <button
                                                 onClick={() => handleViewMore(cat)}
-                                                className="hover:underline"
+                                                className="hover:underline cursor-pointer"
                                             >
                                                 View More →
                                             </button>
@@ -238,7 +238,7 @@ export default function Home() {
                                         {visible > 4 && (
                                             <button
                                                 onClick={() => handleViewLess(cat)}
-                                                className="text-gray-500 hover:underline"
+                                                className="text-gray-500 hover:underline cursor-pointer"
                                             >
                                                 View Less
                                             </button>
